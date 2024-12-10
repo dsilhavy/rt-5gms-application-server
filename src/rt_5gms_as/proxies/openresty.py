@@ -214,16 +214,16 @@ class OpenRestyServerConfig(object):
             ret += '\n'
         ret += f'''{prefix}  location @handle_redirect {{
 {prefix}    rewrite_by_lua_block {{
-{prefix}      -- ngx.log(ngx.DEBUG,"rewrite_by_lua_block(",ngx.var.upstream_http_location,",",ngx.var.location_prefix,",",ngx.var.upstream_status,")")
+{prefix}      ngx.log(ngx.DEBUG,"rewrite_by_lua_block(",ngx.var.upstream_http_location,",",ngx.var.location_prefix,",",ngx.var.upstream_status,")")
 {prefix}      local matches = ngx.re.match(ngx.var.upstream_http_location, "(.*/)([^/].*)", "o")
 {prefix}      ngx.ctx.origin_redir_prefix = matches[1]
 {prefix}      local redir_object = matches[2]
-{prefix}      -- ngx.log(ngx.DEBUG, "ngx.ctx.origin_redir_prefix = '",ngx.ctx.origin_redir_prefix,"', redir_object = '",redir_object,"'")
+{prefix}      ngx.log(ngx.DEBUG, "ngx.ctx.origin_redir_prefix = '",ngx.ctx.origin_redir_prefix,"', redir_object = '",redir_object,"'")
 {prefix}      ngx.ctx.m4_redir_prefix = dynredir.get(ngx.var.location_prefix, ngx.ctx.origin_redir_prefix)
 {prefix}      ngx.redirect(ngx.ctx.m4_redir_prefix..redir_object, ngx.var.upstream_status)
 {prefix}    }}
 {prefix}    body_filter_by_lua_block {{
-{prefix}      -- ngx.log(ngx.DEBUG, "body_filter_by_lua_block(",ngx.ctx.origin_redir_prefix,",",ngx.ctx.m4_redir_prefix,")")
+{prefix}      ngx.log(ngx.DEBUG, "body_filter_by_lua_block(",ngx.ctx.origin_redir_prefix,",",ngx.ctx.m4_redir_prefix,")")
 {prefix}      if (ngx.arg[1]) then
 {prefix}        ngx.arg[1] = ngx.re.sub(ngx.arg[1], re_escape(ngx.ctx.origin_redir_prefix), ngx.ctx.m4_redir_prefix)
 {prefix}      end
