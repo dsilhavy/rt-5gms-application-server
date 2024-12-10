@@ -96,12 +96,12 @@ class OpenRestyLocationConfig(object):
             ret += f'{prefix}  rewrite "{regex}" "{replace}" break;\n'
         ret += f'''{prefix}  proxy_cache_key "{self.provisioning_session}:u=$uri";
 {prefix}  rewrite_by_lua_block {{
-{prefix}    -- ngx.log(ngx.DEBUG,"rewrite_by_lua_block(",ngx.var.uri,", ",ngx.var.downstream_prefix_url,")")
+{prefix}    ngx.log(ngx.DEBUG,"rewrite_by_lua_block(",ngx.var.uri,", ",ngx.var.downstream_prefix_url,")")
 {prefix}    local uri = ngx.var.uri
 {prefix}    if uri:sub(1,{len(self.path_prefix)}) == "{self.path_prefix}" then
 {prefix}      uri = uri:sub({len(self.path_prefix)})
 {prefix}    end
-{prefix}    -- ngx.log(ngx.DEBUG,"rewrite_by_lua_block: uri = ", uri)
+{prefix}    ngx.log(ngx.DEBUG,"rewrite_by_lua_block: uri = ", uri)
 {prefix}    ngx.var.downstream_prefix_url,ngx.ctx.uri = dynredir.mapUrl("{self.path_prefix}", ngx.var.downstream_prefix_url, uri)
 {prefix}    ngx.req.set_uri(uri)
 {prefix}    ngx.var.downstream_prefix_url = ngx.var.downstream_prefix_url..ngx.ctx.uri:sub(2)
